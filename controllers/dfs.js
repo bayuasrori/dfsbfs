@@ -1,6 +1,5 @@
 var _pj;
 var peta;
-var peta2 ={"1":["2"],"2":["1","3"],"3":["2","4","8","9"],"4":["3","5","6",""],"5":["4"],"6":["4","7"],"7":["6","8"],"8":["4","3","7","12"],"9":["3","10","11"],"10":["9"],"11":["12","9"],"12":["11","8"]};
 function _pj_snippets(container) {
     function in_es6(left, right) {
         if (((right instanceof Array) || ((typeof right) === "string"))) {
@@ -18,7 +17,6 @@ function _pj_snippets(container) {
 }
 _pj = {};
 _pj_snippets(_pj);
-peta = {"A": ["B"], "B": ["A", "C"], "C": ["B", "D", "H", "I"], "D": ["C", "E", "F", "H"], "E":["D"], "F":["D", "G"], "G": ["F", "H"], "H":["D", "C", "G", "L"], "I": ["C", "J", "K"], "J": ["I"], "K": ["L", "I"], "L": ["K", "H"]};
 function dfs(graf, mulai, tujuan) {
     var isi, jalur, jalur_baru, panjang_tumpukan, stack, state, visited;
     stack = [[mulai]];
@@ -27,10 +25,9 @@ function dfs(graf, mulai, tujuan) {
     while (stack) {
         panjang_tumpukan = (stack.length - 1);
         jalur = stack.pop(panjang_tumpukan);
-        //console.log(stack);
         if (!jalur || !jalur.length) { return; }
         state = jalur.slice((- 1))[0];
-        path=jalur[1]; console.log(path);
+        path=jalur[1];
         if ((state == tujuan)) {
             return jalur;
         } else {
@@ -63,28 +60,18 @@ function flatten (arr) {
     return newArr;
 }
 
-// var nes = (dfs(peta, "D", "G"));
-// var s;
-// console.log(nes);
-// console.log(flatten(nes))
-
 async function reqDFS(req,res) {
     var petas = req.body.peta;
     var start = (req.body.start);
     var destination = (req.body.destination);
-    // console.log(JSON.stringify(start));
     let payload = {
         success: true,
         message: 'Berhasil menghapus data Anggota.',
     };
     petas=JSON.parse(petas);
-    console.log(req.body);
 
     var nes = (dfs(petas,start, destination));
-    // console.log(JSON.parse(petas))
     res.json(flatten(nes));
-    // console.log(  )
-    // res.json("wokokok");
 }
 
 module.exports= {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Network | Basic usage</title>
+  <title>DFS and BFS</title>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
@@ -23,9 +23,9 @@
 
 <div class="row">
     <div class="col-lg-12 header">
-        <p>
-            Create a simple network with some nodes and edges.
-        </p>
+        <h2 align="center">
+            Searching path using DFS and BFS
+        </h2>
     </div>
 </div>
 <div class="row">
@@ -108,20 +108,11 @@
 
 
 <script type="text/javascript">
-    // create an array with nodes
-
-    //var node = <%- JSON.stringify(nodes) %>;
-    //var edge = <%- JSON.stringify(edges)%>;
-    //var nodes = new vis.DataSet(node);
-
-    // create an array with edges
-    //var edges = new vis.DataSet(edge);
 
     $(document).ready(function(){
         let nodes = eval($('textarea#node').val());
         let edges = eval($('textarea#edges').val());
         // create a network
-        console.log(eval(nodes));
         var container = document.getElementById('map');
         var data = {
             nodes: nodes,
@@ -165,8 +156,6 @@
             let dest = $('#dest').val();
             let startId=(nodes.find(o=>o.label === start));
             let destId=(nodes.find(o=>o.label === dest));
-            // let path = dfs(map,startId.id,destId.id);
-            // console.log(path);
             var path;
             var data = {
                 peta : map,
@@ -180,11 +169,10 @@
                 data: data,
                 contentType : "application/x-www-form-urlencoded; charset=UTF-8",
                 success: function (result) {
-                    // console.log(result);
                     path = result;
                 },
                 error : function (err) {
-                    console.log("err");
+                    alert("case sensitife")
                 },
                 async: false
             });
@@ -210,7 +198,6 @@
 
 function changeColor(path,node,edges) {
     var count=0;
-    // console.log(node[0].id);
     for(var i in node){
         for(var j in path){
             if(path[j]==node[i].id){
@@ -223,9 +210,7 @@ function changeColor(path,node,edges) {
         for(var j in path){
             if(edges[i].from==path[j]&&edges[i].to==path[parseInt(j)+1]){
                 edges[i].color = {color:'red'};
-                // console.log("wwwwwwwwww");
             }
-            // console.log(parseInt(j)+1);
 
         }
     }
@@ -241,16 +226,13 @@ function convert(nodes,edges) {
         arr2=[];
         for(var j in edges){
             if(nodes[i].id==edges[j].from){
-                //[nodes[i].id]= {edges[j].from,edges[j].to};
                 arr2.push(edges[j].to);
-                // console.log(edges[j].to);
             }
         }
         obj[nodes[i].id] = arr2.map(String);
         arr.push(obj);
     }
     return JSON.stringify(obj);
-    // console.log(obj);
 }
 </script>
 
