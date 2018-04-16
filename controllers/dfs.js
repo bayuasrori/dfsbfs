@@ -31,7 +31,7 @@ function dfs(graf, mulai, tujuan) {
         if (!jalur || !jalur.length) { return; }
         state = jalur.slice((- 1))[0];
         path=jalur[1]; console.log(path);
-        if ((state === tujuan)) {
+        if ((state == tujuan)) {
             return jalur;
         } else {
             if ((! _pj.in_es6(state, visited))) {
@@ -70,14 +70,21 @@ function flatten (arr) {
 
 async function reqDFS(req,res) {
     var petas = req.body.peta;
-    var start = req.body.start;
-    var destination = req.body.destination;
+    var start = (req.body.start);
+    var destination = (req.body.destination);
+    // console.log(JSON.stringify(start));
     let payload = {
         success: true,
         message: 'Berhasil menghapus data Anggota.',
     };
-    console.log(JSON.stringify(start));
-    res.json("wuwlwwwwllw");
+    petas=JSON.parse(petas);
+    console.log(req.body);
+
+    var nes = (dfs(petas,start, destination));
+    // console.log(JSON.parse(petas))
+    res.json(flatten(nes));
+    // console.log(  )
+    // res.json("wokokok");
 }
 
 module.exports= {
