@@ -1,22 +1,4 @@
-var _pj;
-var peta;
-function _pj_snippets(container) {
-    function in_es6(left, right) {
-        if (((right instanceof Array) || ((typeof right) === "string"))) {
-            return (right.indexOf(left) > (- 1));
-        } else {
-            if (((right instanceof Map) || (right instanceof Set) || (right instanceof WeakMap) || (right instanceof WeakSet))) {
-                return right.has(left);
-            } else {
-                return (left in right);
-            }
-        }
-    }
-    container["in_es6"] = in_es6;
-    return container;
-}
-_pj = {};
-_pj_snippets(_pj);
+
 function dfs(graf, mulai, tujuan) {
     var isi, jalur, jalur_baru, panjang_tumpukan, stack, state, visited;
     stack = [[mulai]];
@@ -28,12 +10,11 @@ function dfs(graf, mulai, tujuan) {
         if (!jalur || !jalur.length) { return; }
         state = jalur.slice((- 1))[0];
         path=jalur[1];
-        if ((state == tujuan)) {
+        if ((state === tujuan)) {
             return jalur;
         } else {
-            if ((! _pj.in_es6(state, visited))) {
-                for (var cabang, _pj_c = 0, _pj_a = graf[state], _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
-                    cabang = _pj_a[_pj_c];
+            if (!(visited.includes(state))) {
+                for (var cabang of graf[state]) {
                     jalur_baru = [jalur];
                     jalur_baru.push(cabang);
                     stack.push(jalur_baru);
@@ -47,7 +28,6 @@ function dfs(graf, mulai, tujuan) {
         }
     }
 }
-
 function flatten (arr) {
     var newArr = [];
     for (var i = 0; i < arr.length; i++) {
