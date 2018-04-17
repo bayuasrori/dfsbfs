@@ -17,14 +17,13 @@ function _pj_snippets(container) {
 }
 _pj = {};
 _pj_snippets(_pj);
-function dfs(graf, mulai, tujuan) {
-    var isi, jalur, jalur_baru, panjang_tumpukan, stack, state, visited;
-    stack = [[mulai]];
+function bfs(graf, mulai, tujuan) {
+    var isi, jalur, jalur_baru, panjang_tumpukan, queue, state, visited;
+    queue = [[mulai]];
     visited = [];
     var path=[];
-    while (stack) {
-        panjang_tumpukan = (stack.length - 1);
-        jalur = stack.pop(panjang_tumpukan);
+    while (queue) {
+        jalur = queue.pop(0);
         if (!jalur || !jalur.length) { return; }
         state = jalur.slice((- 1))[0];
         path=jalur[1];
@@ -36,12 +35,12 @@ function dfs(graf, mulai, tujuan) {
                     cabang = _pj_a[_pj_c];
                     jalur_baru = [jalur];
                     jalur_baru.push(cabang);
-                    stack.push(jalur_baru);
+                    queue.push(jalur_baru);
                 }
                 visited.push(state);
             }
         }
-        isi = stack.length;
+        isi = queue.length;
         if ((isi === 0)) {
             console.log("Tidak ditemukan");
         }
@@ -60,7 +59,7 @@ function flatten (arr) {
     return newArr;
 }
 
-async function reqDFS(req,res) {
+async function reqBFS(req,res) {
     var petas = req.body.peta;
     var start = (req.body.start);
     var destination = (req.body.destination);
@@ -70,10 +69,10 @@ async function reqDFS(req,res) {
     };
     petas=JSON.parse(petas);
 
-    var nes = (dfs(petas,start, destination));
+    var nes = (bfs(petas,start, destination));
     res.json(flatten(nes));
 }
 
 module.exports= {
-    reqDFS
+    reqBFS
 }
