@@ -11,7 +11,7 @@
 
     <style type="text/css">
 
-        .map {
+        #map {
             width: 600px;
             height: 400px;
             border: 1px solid lightgray;
@@ -29,15 +29,25 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-6 map" id="map"></div>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12" id="map"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="path">Path:</label>
+                <input type="text" class="form-control" id="path">
+            </div>
+        </div>
+    </div>
     <div class="col-lg-6 input">
         <div class="row">
             <div class="col-lg-1"></div>
-            <div class="col-lg-10">
+            <div class="col-lg-5">
                 <form action="#">
                     <div class="form-group">
                         <label for="node">Node:</label>
-                        <textarea class="form-control" rows="5" id="node">[
+                        <textarea class="form-control" rows="4" id="node">[
  {id: 1, label: 'A'},
  {id: 2, label: 'B'},
  {id: 3, label: 'C'},
@@ -56,7 +66,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edges">Edges:</label>
-                        <textarea class="form-control" rows="5" id="edges">[
+                        <textarea class="form-control" rows="4" id="edges">[
 {from: 1, to: 2},
 {from: 2, to: 1},
 {from: 2, to: 3},
@@ -101,6 +111,10 @@
                     <button id="delete" class="btn btn-default">Delete</button>
                 </form>
             </div>
+            <div class="col-lg-5">
+                <label for="graph">Graph :</label>
+                <textarea class="form-control" id="graph" rows="20"> </textarea>
+            </div>
             <div class="col-lg-1"></div>
         </div>
     </div>
@@ -133,8 +147,9 @@
 
             let nodes = eval($('textarea#node').val());
             let edges = eval($('textarea#edges').val());
+            let map = getPath(nodes,edges);
+            $('#graph').val(JSON.stringify(JSON.parse(map)));
             // create a network
-            console.log(edges);
             // console.log(eval(nodes));
             var container = document.getElementById('map');
             var data = {
@@ -153,6 +168,7 @@
             let nodes = eval($('textarea#node').val());
             let edges = eval($('textarea#edges').val());
             let map = convert(nodes,edges);
+            $("#graph").val(JSON.stringify(JSON.parse(map),null,"\t"));
             let start = $('#start').val();
             let dest = $('#dest').val();
             let startId=(nodes.find(o=>o.label === start));
@@ -163,7 +179,7 @@
                 start : startId.id,
                 destination : destId.id
             };
-            console.log("eror");
+
             $.ajax({
                 type: "POST",
                 url:"http://localhost:3000/dfs",
@@ -177,7 +193,17 @@
                 },
                 async: false
             });
-
+            $('#path').val(function () {
+                var p=[];
+                for(var i of nodes){
+                    for(var j of path){
+                        if(j == i.id){
+                            p.push(i.label)
+                        }
+                    }
+                }
+                return p;
+            });
             data = changeColor(path,nodes,edges);
 
 
@@ -199,6 +225,7 @@
             let nodes = eval($('textarea#node').val());
             let edges = eval($('textarea#edges').val());
             let map = convert(nodes,edges);
+            $("#graph").val(JSON.stringify(JSON.parse(map),null,"\t"));
             let start = $('#start').val();
             let dest = $('#dest').val();
             let startId=(nodes.find(o=>o.label === start));
@@ -223,7 +250,17 @@
                 },
                 async: false
             });
-
+            $('#path').val(function () {
+                var p=[];
+                for(var i of nodes){
+                    for(var j of path){
+                        if(j == i.id){
+                            p.push(i.label)
+                        }
+                    }
+                }
+                return p;
+            });
             data = changeColor(path,nodes,edges);
 
 
@@ -277,6 +314,37 @@
                 }
             }
             obj[nodes[i].id] = arr2.map(String);
+            arr.push(obj);
+        }
+        return JSON.stringify(obj);
+    }
+    function getPath(nodes,edges) {
+        var obj={};
+        var arr=[];
+        var arr2=[];
+
+        for(var i in nodes){
+            //obj={}
+            arr2=[];
+            for(var j in edges){
+                if(nodes[i].id==edges[j].from){
+                    // arr2.push(edges[j].to);
+                    // console.log( edges[j].to);
+                    // console.log(nodes[edges[j].from]['label']);
+                    if (typeof nodes[edges[j].to] !== 'undefined') {
+                        // variable is undefined
+                        arr2.push(nodes[edges[j].to-1].label);
+                    }
+                    for (var k in nodes){
+                        if(edges[j].to==nodes[i].id){
+                            console.log( edges[j].to);
+                        }
+                    }
+                }
+            }
+
+
+            obj[nodes[i].label] = arr2.map(String);
             arr.push(obj);
         }
         return JSON.stringify(obj);
